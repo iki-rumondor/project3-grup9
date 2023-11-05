@@ -1,5 +1,4 @@
 package repository
 
-type Repository interface{
-
+type TaskRepository interface {
 }
