@@ -12,15 +12,18 @@ import (
 
 func main() {
 	gormDB, err := database.NewMysqlDB()
-	if err != nil{
+	if err != nil {
 		log.Fatal(err.Error())
 		return
 	}
 
-	repo := repository.NewRepository(gormDB)
-	service := application.NewService(repo)
-	handler := customHTTP.NewHandler(service)
+	categoryRepo := repository.NewRepository(gormDB)
+	categoryService := application.NewService(categoryRepo)
+	categoryHandler := customHTTP.NewHandler(categoryService)
 
+	handlers := customHTTP{
+		categoryHandler: categoryHandler,
+	}
 	var PORT = ":8080"
-	routes.StartServer(handler).Run(PORT)
+	routes.StartServer(handlers).Run(PORT)
 }
