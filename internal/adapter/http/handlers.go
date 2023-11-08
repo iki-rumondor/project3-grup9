@@ -1,5 +1,7 @@
 package customHTTP
 
 type Handlers struct {
-	CategoryHandlers *CategoryHandlers
+	AuthHandler     *AuthHandler
+	TaskHandler     *TaskHandler
+	CategoryHandler *CategoryHandler
 }

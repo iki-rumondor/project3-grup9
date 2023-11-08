@@ -1,12 +1,8 @@
 package application
 
 import (
-	"errors"
-	"fmt"
-
-	"github.com/iki-rumondor/init-golang-service/internal/domain"
-	"github.com/iki-rumondor/init-golang-service/internal/repository"
-	"gorm.io/gorm"
+	"github.com/iki-rumondor/project3-grup9/internal/domain"
+	"github.com/iki-rumondor/project3-grup9/internal/repository"
 )
 
 type CategoryService struct {
@@ -22,52 +18,52 @@ func NewCategoryService(repo repository.CategoryRepository) *CategoryService {
 func (s *CategoryService) CreateCategory(category *domain.Category) (*domain.Category, error) {
 	result, err := s.Repo.CreateCategory(category)
 	if err != nil {
-		return nil, errors.New("failed to save category into database")
+		return nil, err
 	}
 
 	return result, nil
 }
 
-func (s *CategoryService) GetCategorys(TaskID uint) (*[]domain.Category, error) {
-	categorys, err := s.Repo.FindCategorys(TaskID)
+func (s *CategoryService) GetCategories() (*[]domain.Category, error) {
+	categories, err := s.Repo.FindCategories()
 	if err != nil {
-		return nil, errors.New("failed to get task category from database")
+		return nil, err
 	}
 
-	return categorys, nil
+	return categories, nil
 }
 
-func (s *CategoryService) UpdateCategory(category *domain.Category) (*domain.Category, error) {
-	_, err := s.Repo.FindCategory(category.ID)
+// func (s *CategoryService) UpdateCategory(category *domain.Category) (*domain.Category, error) {
+// 	_, err := s.Repo.FindCategory(category.ID)
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, fmt.Errorf("category with id %d id not found", category.ID)
-	}
-	if err != nil {
-		return nil, errors.New("failed to get category from database")
-	}
+// 	if errors.Is(err, gorm.ErrRecordNotFound) {
+// 		return nil, fmt.Errorf("category with id %d id not found", category.ID)
+// 	}
+// 	if err != nil {
+// 		return nil, errors.New("failed to get category from database")
+// 	}
 
-	category, err = s.Repo.UpdateCategory(category)
-	if err != nil {
-		return nil, errors.New("failed to update category to database")
-	}
+// 	category, err = s.Repo.UpdateCategory(category)
+// 	if err != nil {
+// 		return nil, errors.New("failed to update category to database")
+// 	}
 
-	return category, nil
-}
+// 	return category, nil
+// }
 
-func (s *CategoryService) DeleteCategory(category *domain.Category) error {
-	_, err := s.Repo.FindCategory(category.ID)
+// func (s *CategoryService) DeleteCategory(category *domain.Category) error {
+// 	_, err := s.Repo.FindCategory(category.ID)
 
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return fmt.Errorf("category with id %d id not found", category.ID)
-	}
-	if err != nil {
-		return errors.New("failed to get category from database")
-	}
+// 	if errors.Is(err, gorm.ErrRecordNotFound) {
+// 		return fmt.Errorf("category with id %d id not found", category.ID)
+// 	}
+// 	if err != nil {
+// 		return errors.New("failed to get category from database")
+// 	}
 
-	if err := s.Repo.DeleteCategory(category); err != nil {
-		return errors.New("we encountered an issue while trying to delete the category")
-	}
+// 	if err := s.Repo.DeleteCategory(category); err != nil {
+// 		return errors.New("we encountered an issue while trying to delete the category")
+// 	}
 
-	return nil
-}
+// 	return nil
+// }

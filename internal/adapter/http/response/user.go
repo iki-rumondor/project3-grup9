@@ -2,18 +2,16 @@ package response
 
 import "time"
 
-type User struct {
-	ID         uint `gorm:"primaryKey"`
-	Full_name  string
-	Email      string
-	password   string
-	Role       string
-	Created_At time.Time
-	Updated_At time.Time
+type CreateUser struct {
+	ID        uint      `json:"id"`
+	FullName  string    `json:"full_name"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
-type Users struct {
-	ID        uint   `json:"id"`
-	Email     string `json:"email"`
-	Full_Name string `json:"full_name"`
+type UpdateUser struct {
+	ID        uint      `json:"id"`
+	FullName  string    `json:"full_name"`
+	Email     string    `json:"email"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

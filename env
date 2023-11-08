@@ -1,8 +1,0 @@
-# DATABASE INFORMATION
-
-DBHOST = "localhost"
-DBPORT = ""
-DBUSER = ""
-DBPASSWORD = "" 
-DBNAME = ""
-SSLMODE = "disable"
