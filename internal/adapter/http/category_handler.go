@@ -2,6 +2,7 @@ package customHTTP
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
@@ -69,96 +70,104 @@ func (h *CategoryHandler) GetCategories(c *gin.Context) {
 		return
 	}
 
-	var categories []*response.Category
+	var categories = []*response.Category{}
 
 	for _, category := range *result {
+
+		var tasks = []*response.TaskCategory{}
+
+		for _, task := range category.Tasks {
+			tasks = append(tasks, &response.TaskCategory{
+				ID:          task.ID,
+				Title:       task.Title,
+				Description: task.Description,
+				UserID:      task.UserID,
+				CategoryID:  task.CategoryID,
+				CreatedAt:   task.CreatedAt,
+				UpdatedAt:   task.UpdatedAt,
+			})
+		}
+
 		categories = append(categories, &response.Category{
-			ID:        category.ID,
-			Type:      category.Type,
-			UpdatedAt: category.UpdatedAt,
-			CreatedAt: category.CreatedAt,
-			// TaskCategory: response.TaskCategory{
-			// 	ID:          category.Tasks.,
-			// 	Title:       category.Tasks.Title,
-			// 	Description: category.Tasks.Description,
-			// 	User_Id:     category.Tasks.User_Id,
-			// 	Created_At:  category.Tasks.Created_At,
-			// 	Updated_At:  category.Tasks.Updated_At,
-			// },
+			ID:           category.ID,
+			Type:         category.Type,
+			UpdatedAt:    category.UpdatedAt,
+			CreatedAt:    category.CreatedAt,
+			TaskCategory: tasks,
 		})
 	}
 
 	c.JSON(http.StatusOK, categories)
 }
 
-// func (h *CategoryHandler) UpdateCategory(c *gin.Context) {
-// 	var body request.Category
-// 	if err := c.BindJSON(&body); err != nil {
-// 		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
-// 			Message: err.Error(),
-// 		})
-// 		return
-// 	}
+func (h *CategoryHandler) UpdateCategory(c *gin.Context) {
+	var body request.Category
+	if err := c.BindJSON(&body); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
+			Message: err.Error(),
+		})
+		return
+	}
 
-// 	if _, err := govalidator.ValidateStruct(&body); err != nil {
-// 		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
-// 			Message: err.Error(),
-// 		})
-// 		return
-// 	}
+	if _, err := govalidator.ValidateStruct(&body); err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
+			Message: err.Error(),
+		})
+		return
+	}
 
-// 	urlParam := c.Param("id")
-// 	categoryID, err := strconv.Atoi(urlParam)
-// 	if err != nil {
-// 		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
-// 			Message: "please check the url and ensure it follows the correct format",
-// 		})
-// 		return
-// 	}
+	urlParam := c.Param("id")
+	categoryID, err := strconv.Atoi(urlParam)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
+			Message: "please check the url and ensure it follows the correct format",
+		})
+		return
+	}
 
-// 	category := domain.Category{
-// 		ID:   uint(categoryID),
-// 		Type: body.Type,
-// 	}
+	category := domain.Category{
+		ID:   uint(categoryID),
+		Type: body.Type,
+	}
 
-// 	result, err := h.Service.UpdateCategory(&category)
-// 	if err != nil {
-// 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
-// 			Message: err.Error(),
-// 		})
-// 		return
-// 	}
+	result, err := h.Service.UpdateCategory(&category)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
+			Message: err.Error(),
+		})
+		return
+	}
 
-// 	c.JSON(http.StatusOK, response.UpdateCategory{
-// 		ID:         result.ID,
-// 		Type:       result.Type,
-// 		// Updated_At: result.Updated_At,
-// 	})
-// }
+	c.JSON(http.StatusOK, response.UpdateCategory{
+		ID:        result.ID,
+		Type:      result.Type,
+		UpdatedAt: result.UpdatedAt,
+	})
+}
 
-// func (h *CategoryHandler) DeleteCategory(c *gin.Context) {
+func (h *CategoryHandler) DeleteCategory(c *gin.Context) {
 
-// 	urlParam := c.Param("id")
-// 	categoryID, err := strconv.Atoi(urlParam)
-// 	if err != nil {
-// 		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
-// 			Message: "please check the url and ensure it follows the correct format",
-// 		})
-// 		return
-// 	}
+	urlParam := c.Param("id")
+	categoryID, err := strconv.Atoi(urlParam)
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusBadRequest, response.Message{
+			Message: "please check the url and ensure it follows the correct format",
+		})
+		return
+	}
 
-// 	category := domain.Category{
-// 		ID: uint(categoryID),
-// 	}
+	category := domain.Category{
+		ID: uint(categoryID),
+	}
 
-// 	if err := h.Service.DeleteCategory(&category); err != nil {
-// 		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
-// 			Message: err.Error(),
-// 		})
-// 		return
-// 	}
+	if err := h.Service.DeleteCategory(&category); err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
+			Message: err.Error(),
+		})
+		return
+	}
 
-// 	c.JSON(http.StatusOK, response.Message{
-// 		Message: "Your Category has been successfully deleted",
-// 	})
-// }
+	c.JSON(http.StatusOK, response.Message{
+		Message: "Category has been successfully deleted",
+	})
+}

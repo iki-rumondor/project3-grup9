@@ -15,16 +15,23 @@ func StartServer(handler *customHTTP.Handlers) *gin.Engine {
 		public.POST("users/login", handler.AuthHandler.Login)
 	}
 
-	users := router.Group("users").Use(middleware.IsValidJWT())
+	admin := router.Group("").Use(middleware.IsValidJWT(), middleware.IsAdmin())
 	{
-		users.PUT("update-account", middleware.SetUserID(), handler.AuthHandler.UpdateUser)
-		users.PUT("delete-account", middleware.SetUserID(), handler.AuthHandler.DeleteUser)
+		admin.POST("categories", handler.CategoryHandler.CreateCategory)
+		admin.PATCH("categories/:id", handler.CategoryHandler.UpdateCategory)
+		admin.DELETE("categories/:id", handler.CategoryHandler.DeleteCategory)
 	}
 
-	categories := router.Group("categories")
+	users := router.Group("").Use(middleware.IsValidJWT())
 	{
-		categories.POST("/", handler.CategoryHandler.CreateCategory)
-		categories.GET("/", handler.CategoryHandler.GetCategories)
+		users.GET("categories", handler.CategoryHandler.GetCategories)
+		users.PUT("update-account", middleware.SetUserID(), handler.AuthHandler.UpdateUser)
+		users.DELETE("delete-account", middleware.SetUserID(), handler.AuthHandler.DeleteUser)
+	}
+
+	// categories := router.Group("categories").Use(middleware.IsValidJWT())
+	{
+		// categories.POST("/", middleware.IsAdmin(), handler.CategoryHandler.CreateCategory)
 		// categories.PATCH("/:id", handler.CategoryHandler.UpdateCategory)
 		// categories.DELETE("/:id", handler.CategoryHandler.DeleteCategory)
 	}

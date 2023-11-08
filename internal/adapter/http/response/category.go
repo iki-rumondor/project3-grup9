@@ -3,11 +3,11 @@ package response
 import "time"
 
 type Category struct {
-	ID           uint         `json:"id"`
-	Type         string       `json:"type"`
-	CreatedAt    time.Time    `json:"created_at"`
-	UpdatedAt    time.Time    `json:"updated_at"`
-	TaskCategory TaskCategory `json:"Tasks"`
+	ID           uint            `json:"id"`
+	Type         string          `json:"type"`
+	CreatedAt    time.Time       `json:"created_at"`
+	UpdatedAt    time.Time       `json:"updated_at"`
+	TaskCategory []*TaskCategory `json:"Tasks"`
 }
 
 type CreateCategory struct {
@@ -17,9 +17,9 @@ type CreateCategory struct {
 }
 
 type UpdateCategory struct {
-	ID         uint      `json:"id"`
-	Type       string    `json:"type"`
-	Updated_At time.Time `json:"updated_at"`
+	ID        uint      `json:"id"`
+	Type      string    `json:"type"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 type TaskCategory struct {

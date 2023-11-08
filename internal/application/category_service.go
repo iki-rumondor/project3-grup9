@@ -33,37 +33,21 @@ func (s *CategoryService) GetCategories() (*[]domain.Category, error) {
 	return categories, nil
 }
 
-// func (s *CategoryService) UpdateCategory(category *domain.Category) (*domain.Category, error) {
-// 	_, err := s.Repo.FindCategory(category.ID)
+func (s *CategoryService) UpdateCategory(category *domain.Category) (*domain.Category, error) {
 
-// 	if errors.Is(err, gorm.ErrRecordNotFound) {
-// 		return nil, fmt.Errorf("category with id %d id not found", category.ID)
-// 	}
-// 	if err != nil {
-// 		return nil, errors.New("failed to get category from database")
-// 	}
+	category, err := s.Repo.UpdateCategory(category)
+	if err != nil {
+		return nil, err
+	}
 
-// 	category, err = s.Repo.UpdateCategory(category)
-// 	if err != nil {
-// 		return nil, errors.New("failed to update category to database")
-// 	}
+	return category, nil
+}
 
-// 	return category, nil
-// }
+func (s *CategoryService) DeleteCategory(category *domain.Category) error {
 
-// func (s *CategoryService) DeleteCategory(category *domain.Category) error {
-// 	_, err := s.Repo.FindCategory(category.ID)
+	if err := s.Repo.DeleteCategory(category); err != nil {
+		return err
+	}
 
-// 	if errors.Is(err, gorm.ErrRecordNotFound) {
-// 		return fmt.Errorf("category with id %d id not found", category.ID)
-// 	}
-// 	if err != nil {
-// 		return errors.New("failed to get category from database")
-// 	}
-
-// 	if err := s.Repo.DeleteCategory(category); err != nil {
-// 		return errors.New("we encountered an issue while trying to delete the category")
-// 	}
-
-// 	return nil
-// }
+	return nil
+}

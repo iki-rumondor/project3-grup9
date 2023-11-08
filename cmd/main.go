@@ -46,6 +46,10 @@ func main() {
 func migration(db *gorm.DB) {
 	db.Migrator().DropTable(&domain.User{})
 	db.Migrator().CreateTable(&domain.User{})
+	db.Migrator().DropTable(&domain.Category{})
+	db.Migrator().CreateTable(&domain.Category{})
+	db.Migrator().DropTable(&domain.Task{})
+	db.Migrator().CreateTable(&domain.Task{})
 	db.Create(&domain.User{
 		FullName: "Administrator",
 		Email: "admin@admin.com",
