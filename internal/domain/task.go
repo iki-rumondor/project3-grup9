@@ -1,6 +1,10 @@
 package domain
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 type Task struct {
 	ID          uint   `gorm:"primaryKey"`
@@ -9,8 +13,44 @@ type Task struct {
 	Status      bool
 	UserID      uint
 	CategoryID  uint
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
 	User        User
 	Category    Category
+
+	CreatedAt time.Time
+	UpdatedAt time.Time
+}
+
+func (t *Task) BeforeCreate(tx *gorm.DB) error {
+
+	if err := tx.First(&User{}, "id = ?", t.UserID).Error; err != nil {
+		return err
+	}
+
+	if err := tx.First(&Category{}, "id = ?", t.CategoryID).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (t *Task) BeforeUpdate(tx *gorm.DB) error {
+
+	if err := tx.First(&Task{}, "id = ? AND user_id = ?", t.ID, t.UserID).Error; err != nil {
+		return err
+	}
+
+	if err := tx.First(&Category{}, "id = ?", t.CategoryID).Error; err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (t *Task) BeforeDelete(tx *gorm.DB) error {
+
+	if err := tx.First(&Task{}, "id = ? AND user_id = ?", t.ID, t.UserID).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

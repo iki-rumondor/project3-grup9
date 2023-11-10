@@ -11,48 +11,31 @@ type Task struct {
 	CategoryID  uint      `json:"category_id"`
 	CreatedAt   time.Time `json:"created_at"`
 	UpdatedAt   time.Time `json:"updated_at"`
+	User        UserTask
 }
 
 type CreateTask struct {
-	ID          uint   `json:"id"`
-	Title       string `json:"title"`
-	Status      bool   `json:"status"`
-	Description string `json:"description"`
-	User_Id     uint   `json:"user_id"`
-	Category_Id uint   `json:"category_id"`
-	Created_At  time.Time
+	ID          uint      `json:"id"`
+	Title       string    `json:"title"`
+	Status      bool      `json:"status"`
+	Description string    `json:"description"`
+	UserID      uint      `json:"user_id"`
+	CategoryID  uint      `json:"category_id"`
+	CreatedAt   time.Time `json:"created_at"`
 }
 
 type UpdateTask struct {
-	ID          uint   `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Status      bool   `json:"status"`
-	User_Id     uint   `json:"user_id"`
-	Category_Id uint   `json:"category_id"`
-	Updated_At  time.Time
+	ID          uint      `json:"id"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Status      bool      `json:"status"`
+	UserID      uint      `json:"user_id"`
+	CategoryID  uint      `json:"category_id"`
+	UpdatedAt   time.Time `json:"updated_at"`
 }
 
-type UpdateStatusTask struct {
-	ID          uint   `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Status      bool   `json:"status"`
-	User_Id     uint   `json:"user_id"`
-	Category_Id uint   `json:"category_id"`
-	Updated_At  time.Time
-}
-
-type UpdateCategoryTask struct {
-	ID          uint   `json:"id"`
-	Title       string `json:"title"`
-	Description string `json:"description"`
-	Status      bool   `json:"status"`
-	User_Id     uint   `json:"user_id"`
-	Category_Id uint   `json:"category_id"`
-	Updated_At  time.Time
-}
-
-type Tasks struct {
-	Tasks []*Task
+type UserTask struct {
+	ID       uint   `json:"id"`
+	Email    string `json:"email"`
+	FullName string `json:"full_name"`
 }

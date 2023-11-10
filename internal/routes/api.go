@@ -25,24 +25,19 @@ func StartServer(handler *customHTTP.Handlers) *gin.Engine {
 	users := router.Group("").Use(middleware.IsValidJWT())
 	{
 		users.GET("categories", handler.CategoryHandler.GetCategories)
-		users.PUT("update-account", middleware.SetUserID(), handler.AuthHandler.UpdateUser)
-		users.DELETE("delete-account", middleware.SetUserID(), handler.AuthHandler.DeleteUser)
-	}
+		users.GET("tasks", handler.TaskHandler.GetTasks)
 
-	// categories := router.Group("categories").Use(middleware.IsValidJWT())
-	{
-		// categories.POST("/", middleware.IsAdmin(), handler.CategoryHandler.CreateCategory)
-		// categories.PATCH("/:id", handler.CategoryHandler.UpdateCategory)
-		// categories.DELETE("/:id", handler.CategoryHandler.DeleteCategory)
-	}
+		users.POST("tasks", middleware.SetUserID(), handler.TaskHandler.CreateTask)
 
-	// tasks := router.Group("tasks")
-	// {
-	// 	tasks.POST("/", handler.TaskHandler.CreateTask)
-	// 	tasks.GET("/", handler.TaskHandler.GetTask)
-	// 	tasks.PATCH("/:id", handler.TaskHandler.UpdateTask)
-	// 	tasks.DELETE("/:id", handler.TaskHandler.DeleteTask)
-	// }
+		users.PUT("users/update-account", middleware.SetUserID(), handler.AuthHandler.UpdateUser)
+		users.PUT("tasks/:id", middleware.SetUserID(), handler.TaskHandler.UpdateTask)
+
+		users.PATCH("tasks/update-status/:id", middleware.SetUserID(), handler.TaskHandler.UpdateTaskStatus)
+		users.PATCH("tasks/update-category/:id", middleware.SetUserID(), handler.TaskHandler.UpdateTaskCategory)
+
+		users.DELETE("users/delete-account", middleware.SetUserID(), handler.AuthHandler.DeleteUser)
+		users.DELETE("tasks/:id", middleware.SetUserID(), handler.TaskHandler.DeleteTask)
+	}
 
 	return router
 }
