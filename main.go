@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"os"
 
 	"github.com/iki-rumondor/project3-grup9/internal/adapter/database"
 	customHTTP "github.com/iki-rumondor/project3-grup9/internal/adapter/http"
@@ -13,13 +14,13 @@ import (
 )
 
 func main() {
-	gormDB, err := database.NewMysqlDB()
+	gormDB, err := database.NewPostgresDB()
 	if err != nil {
 		log.Fatal(err.Error())
 		return
 	}
 
-	// go migration(gormDB)
+	go migration(gormDB)
 
 	authRepo := repository.NewAuthRepository(gormDB)
 	authService := application.NewAuthService(authRepo)
@@ -39,8 +40,15 @@ func main() {
 		TaskHandler:     taskHandler,
 	}
 
-	var PORT = ":8080"
+	var PORT = envPortOr("3000")
 	routes.StartServer(&handlers).Run(PORT)
+}
+
+func envPortOr(port string) string {
+	if envPort := os.Getenv("PORT"); envPort != "" {
+		return ":" + envPort
+	}
+	return ":" + port
 }
 
 func migration(db *gorm.DB) {

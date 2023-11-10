@@ -29,3 +29,23 @@ func GetDatabaseEnv() (map[string]interface{}, error) {
 
 	return infoDB, nil
 }
+
+func GetPostgresDeployEnv() (map[string]interface{}, error) {
+	
+	dbHost := os.Getenv("PGHOST")
+	dbPort := os.Getenv("PGPORT")
+	dbUser := os.Getenv("PGUSER")
+	dbPassword := os.Getenv("PGPASSWORD")
+	dbName := os.Getenv("PGDATABASE")
+
+	var infoDB = map[string]interface{}{
+		"host": dbHost,
+		"port": dbPort,
+		"user": dbUser,
+		"password": dbPassword,
+		"name": dbName,
+		"sslmode": "disable",
+	}
+
+	return infoDB, nil
+}
