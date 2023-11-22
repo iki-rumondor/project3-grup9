@@ -20,7 +20,7 @@ func main() {
 		return
 	}
 
-	migration(gormDB)
+	// migration(gormDB)g
 
 	authRepo := repository.NewAuthRepository(gormDB)
 	authService := application.NewAuthService(authRepo)
