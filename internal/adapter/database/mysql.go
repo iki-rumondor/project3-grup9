@@ -3,7 +3,7 @@ package database
 import (
 	"fmt"
 
-	"github.com/iki-rumondor/init-golang-service/internal/utils"
+	"github.com/iki-rumondor/project3-grup9/internal/utils"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
