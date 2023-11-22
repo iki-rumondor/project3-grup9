@@ -10,7 +10,7 @@ import (
 
 func NewPostgresDB() (*gorm.DB, error) {
 
-	env, err := utils.GetDatabaseEnv()
+	env, err := utils.GetPostgresDeployEnv()
 	if err != nil {
 		return nil, err
 	}

@@ -27,7 +27,7 @@ func IsValidJWT() gin.HandlerFunc {
 		
 		mapClaims, err := utils.VerifyToken(jwt)
 		if err != nil {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.Message{
 				Message: err.Error(),
 			})
 			return
@@ -46,7 +46,7 @@ func IsAdmin() gin.HandlerFunc {
 
 		role := mapClaims["role"].(string)
 		if role != "admin" {
-			c.AbortWithStatusJSON(http.StatusInternalServerError, response.Message{
+			c.AbortWithStatusJSON(http.StatusUnauthorized, response.Message{
 				Message: "your access to this resource is denied",
 			})
 			return
